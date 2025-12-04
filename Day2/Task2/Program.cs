@@ -1,20 +1,33 @@
 ﻿var text = await File.ReadAllTextAsync("../input.txt");
-
 var ranges = text.Split(',');
 long sum = 0;
-System.Console.WriteLine(ranges.Length);
+
 foreach (var range in ranges)
 {
     var bounds = range.Split('-').Select(long.Parse).ToArray();
     var start = bounds[0];
     var end = bounds[1];
-
     for (var i = start; i <= end; i++)
     {
         var iString = i.ToString();
-        for (var n = 0; n < iString.Length/2; n++)
+        var repeteadSequence = iString[0].ToString();
+        var j = 1;
+        while (j < iString.Length && j+repeteadSequence.Length<= iString.Length)
         {
-            var substring1 = iString.Substring(0, n+1);
+            if (iString.Substring(j,repeteadSequence.Length) == repeteadSequence)
+            {
+                j += repeteadSequence.Length;
+            } 
+            else
+            {
+                repeteadSequence = iString[..(j+1)];
+                j++;
+            }
+        }
+
+        if (repeteadSequence.Length < iString.Length && j >= iString.Length)
+        {
+            sum += i;
         }
     }
 }
